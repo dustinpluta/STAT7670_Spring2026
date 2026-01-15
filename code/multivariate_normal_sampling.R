@@ -41,3 +41,12 @@ plot(X[, 1], X[, 2])
 
 X <- mvrnorm(n = 10000, c(1, 2), Sigma = matrix(c(1, sqrt(2)/2, sqrt(2)/2, 1), nrow = 2))
 plot(X[, 1], X[, 2])
+
+# Find angle of rotation
+
+Sigma <- matrix(c(1, sqrt(2)/2, sqrt(2)/2, 1), nrow = 2)
+Sigma_SVD <- svd(Sigma)
+
+U <- Sigma_SVD$u
+acos(-U[1, 1]) * 180/pi
+
