@@ -109,6 +109,10 @@ Johnson & Wichern 6.6
 
 ## Problem 5
 
+Johnson & Wichern 6.18
+
+## Problem 6
+
 Johnson & Wichern 6.24
 
 **Data for Johnson & Wichern problems is in data folder on github**
