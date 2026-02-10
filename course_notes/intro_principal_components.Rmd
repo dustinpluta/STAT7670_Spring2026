@@ -1,0 +1,227 @@
+# Principal Components Analysis (PCA)
+
+## 1. Motivation and Goals
+
+Principal Components Analysis (PCA) is a **linear dimension-reduction technique** used to:
+
+- Summarize high-dimensional data with fewer variables  
+- Identify dominant modes of variability  
+- Remove redundancy due to correlation  
+- Aid visualization, noise reduction, and preprocessing for downstream models  
+
+**Key idea:**  
+Replace a set of possibly correlated variables with a smaller set of **uncorrelated linear combinations** that retain as much variance as possible.
+
+---
+
+## 2. Data Setup and Notation
+
+Let  
+\[
+\mathbf{X} = (X_1, \dots, X_p)
+\]
+be a random vector with mean \(\boldsymbol{\mu}\) and covariance matrix \(\boldsymbol{\Sigma}\).
+
+Observed data:
+- \(n\) observations  
+- \(p\) variables  
+- Data matrix \( \mathbf{X}_{n \times p} \)
+
+**Standard preprocessing**
+- Center each variable (subtract column means)  
+- Often (but not always) scale variables to unit variance  
+
+---
+
+## 3. Informal Geometric Intuition
+
+
+::contentReference[oaicite:0]{index=0}
+
+
+- Data form a **cloud in \(\mathbb{R}^p\)**  
+- PCA finds orthogonal directions:
+  - First direction: maximum variance  
+  - Second direction: maximum remaining variance subject to orthogonality  
+- Data are **projected** onto these directions  
+
+The first principal component defines the axis along which the data are most spread out.
+
+---
+
+## 4. Variance Maximization Formulation
+
+Define a linear combination:
+\[
+Z = \mathbf{a}^\top \mathbf{X}
+\]
+
+We seek:
+\[
+\max_{\mathbf{a}} \ \mathrm{Var}(Z) = \mathbf{a}^\top \boldsymbol{\Sigma} \mathbf{a}
+\]
+subject to:
+\[
+\mathbf{a}^\top \mathbf{a} = 1
+\]
+
+This constraint prevents variance from being inflated by scaling \(\mathbf{a}\).
+
+---
+
+## 5. Eigenvalue Solution
+
+Using a Lagrange multiplier:
+\[
+\boldsymbol{\Sigma} \mathbf{a} = \lambda \mathbf{a}
+\]
+
+Thus:
+- Principal components are **eigenvectors** of \(\boldsymbol{\Sigma}\)  
+- Variances of PCs are the corresponding **eigenvalues**  
+
+Ordering:
+\[
+\lambda_1 \ge \lambda_2 \ge \dots \ge \lambda_p
+\]
+
+---
+
+## 6. Definition of Principal Components
+
+Let:
+- \(\mathbf{e}_k\) = eigenvector of \(\boldsymbol{\Sigma}\) for eigenvalue \(\lambda_k\)
+
+Then the \(k\)-th principal component is:
+\[
+Z_k = \mathbf{e}_k^\top \mathbf{X}
+\]
+
+Properties:
+- \(\mathrm{Var}(Z_k) = \lambda_k\)  
+- \(\mathrm{Cov}(Z_k, Z_j) = 0\) for \(k \neq j\)  
+- PCs are uncorrelated but **not necessarily independent**
+
+---
+
+## 7. Total Variance and Explained Variance
+
+Total variance:
+\[
+\sum_{j=1}^p \lambda_j = \mathrm{tr}(\boldsymbol{\Sigma})
+\]
+
+Proportion of variance explained by PC \(k\):
+\[
+\frac{\lambda_k}{\sum_{j=1}^p \lambda_j}
+\]
+
+Cumulative proportion for first \(K\) PCs:
+\[
+\frac{\sum_{k=1}^K \lambda_k}{\sum_{j=1}^p \lambda_j}
+\]
+
+This guides **dimension selection**.
+
+---
+
+## 8. Sample PCA
+
+In practice:
+- Replace \(\boldsymbol{\Sigma}\) with the sample covariance matrix \(\mathbf{S}\)  
+- Compute the eigen-decomposition of \(\mathbf{S}\)  
+
+Alternatively:
+- Compute PCA via **singular value decomposition (SVD)** of the centered data:
+\[
+\mathbf{X} = \mathbf{U} \mathbf{D} \mathbf{V}^\top
+\]
+
+Relationship:
+- Columns of \(\mathbf{V}\) are the principal directions  
+- Singular values relate to eigenvalues of \(\mathbf{S}\)
+
+---
+
+## 9. Scores and Loadings
+
+- **Loadings**: elements of eigenvectors \(\mathbf{e}_k\)  
+  - Describe how each original variable contributes to a PC  
+- **Scores**: projected observations
+  \[
+  z_{ik} = \mathbf{e}_k^\top \mathbf{x}_i
+  \]
+
+Interpretation:
+- Loadings → structure of components  
+- Scores → location of observations in reduced space  
+
+---
+
+## 10. Scaling and the Correlation Matrix
+
+If variables have different units or scales:
+- PCA on the covariance matrix may be dominated by high-variance variables  
+- Alternative: PCA on the **correlation matrix**
+
+This is equivalent to:
+- Standardizing each variable to mean 0 and variance 1  
+- Then applying PCA  
+
+Choice depends on scientific context.
+
+---
+
+## 11. Dimension Reduction and Reconstruction
+
+Retain the first \(K < p\) components:
+\[
+\mathbf{X} \approx \sum_{k=1}^K Z_k \mathbf{e}_k
+\]
+
+Properties:
+- Minimum reconstruction error (least-squares sense)  
+- Best rank-\(K\) linear approximation to the data  
+
+---
+
+## 12. Interpretation Caveats
+
+- PCs are **linear combinations**, not original variables  
+- Directions maximize variance, **not interpretability**  
+- High variance does not necessarily imply scientific importance  
+- PCA is **unsupervised** (ignores response variables)
+
+---
+
+## 13. PCA vs Related Methods (Conceptual Preview)
+
+| Method | Goal |
+|------|------|
+| PCA | Maximize variance |
+| Factor Analysis | Model latent structure with noise |
+| LDA | Maximize class separation |
+| PLS | Maximize covariance with response |
+
+---
+
+## 14. When PCA Works Well / Poorly
+
+**Works well**
+- Strong correlation structure  
+- Linear relationships  
+- Moderate noise  
+
+**Works poorly**
+- Nonlinear manifolds  
+- Discrete or categorical data  
+- Settings where variance ≠ importance  
+
+---
+
+## 15. Summary
+
+- PCA finds orthogonal directions of maximal variance  
+- Solutions arise from eigen-decomposition of the covariance matrix  
+- Provides optimal linear dimension reduction  
+- Interpretation requires care and domain knowledge  
