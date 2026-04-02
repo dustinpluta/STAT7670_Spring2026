@@ -2,7 +2,7 @@
 
 **Topic:** LDA, Logistic Regression, SVMs, Decision Trees, Random Forests  
 **Format:** Computational (R)  
-**Due:** [Insert due date]  
+**Due:** 2026-04-19
 **Assigned:** 2026-04-02
 
 ---
