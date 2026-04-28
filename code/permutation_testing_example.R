@@ -5,7 +5,7 @@
 set.seed(123)
 
 # Simulated data
-group_A <- c(82, 85, 88, 90, 91, 87, 84, 86)
+group_A <- c(82, 85, 88, 90, 91, 87, 80, 85)
 group_B <- c(78, 80, 79, 77, 81, 76, 82, 79)
 
 # Observed statistic: mean difference
@@ -56,3 +56,5 @@ legend("topright",
        legend = c("Observed statistic"),
        col = "red",
        lwd = 2)
+
+t.test(group_A, group_B)
